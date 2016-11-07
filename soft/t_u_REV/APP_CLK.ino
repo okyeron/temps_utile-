@@ -595,6 +595,7 @@ public:
   void sync() {
     clk_cnt_ = 0x0;
     div_cnt_ = 0x0;
+    ticks_ = 0x0;
   }
 
   void reset_ticks_internal() {
@@ -1981,6 +1982,10 @@ void CLOCKS_leftButton() {
  
   Clock_channel &selected = clock_channel[clocks_state.selected_channel];
 
+  // sync:
+  for (int i = 0; i < NUM_CHANNELS; ++i) 
+        clock_channel[i].sync();
+
   if (selected.get_page() == TEMPO) {
     selected.set_page(PARAMETERS);
     clocks_state.cursor = clocks_state.cursor_state;
@@ -1988,9 +1993,6 @@ void CLOCKS_leftButton() {
     clocks_state.cursor.AdjustEnd(selected.num_enabled_settings() - 1); 
     return;
   }
-  // sync:
-  for (int i = 0; i < NUM_CHANNELS; ++i) 
-        clock_channel[i].sync();
 }
 
 void CLOCKS_leftButtonLong() {
